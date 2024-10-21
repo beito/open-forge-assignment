@@ -1,3 +1,16 @@
-<p>
-  feed works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>GitHub Users</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let user of users">
+      <ion-avatar slot="start">
+        <img [src]="user.avatar_url" />
+      </ion-avatar>
+      <ion-label>{{ user.login }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
