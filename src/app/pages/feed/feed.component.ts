@@ -4,7 +4,10 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicModule } from '@ionic/angular';
 
-import { GitHubService } from '../../services/github.service';
+import { Store } from '@ngrx/store';
+import { AppState } from '../../store';
+import { loadUsers } from '../../store/users.actions';
+import { Observable, take } from 'rxjs';
 import { GitHubUser } from '../../models/github-user.model';
 
 @Component({
@@ -15,46 +18,27 @@ import { GitHubUser } from '../../models/github-user.model';
   imports: [CommonModule, IonicModule, HttpClientModule],
 })
 export class FeedComponent implements OnInit {
-  public users: GitHubUser[] = [];
-  public hasMoreUsers = true;
-  private nextID = 0;
+  public users$: Observable<GitHubUser[]>;
 
-  constructor(
-    private githubService: GitHubService, 
-    private router: Router
-  ) {}
+  constructor(private store: Store<AppState>, private router: Router) {
+    this.users$ = this.store.select((state) => state.users.users);
+  }
 
   ngOnInit() {
     this.loadUsers();
   }
 
   loadUsers(event?: any) {
-    if (!this.hasMoreUsers) {
+    this.store.dispatch(loadUsers());
+
+    this.users$.pipe(take(1)).subscribe((data) => {
+      console.log("Siguiente Entrada");
+      console.log(data.length);
+
       if (event) {
-        event.target.disabled = true;
+        event.target.complete();
       }
-      return;
-    }
-
-    this.githubService.getUsers(this.nextID).subscribe(
-      (data) => {
-        if (data.length > 0) {
-          this.users = [...this.users, ...data];
-          this.nextID = data[data.length - 1].id;
-        } else {
-          this.hasMoreUsers = false;
-        }
-
-        if (event) {
-          event.target.complete();
-        }
-      },
-      (error) => {
-        if (event) {
-          event.target.complete();
-        }
-      }
-    );
+    });
   }
 
   viewUserProfile(username: string) {

@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let user of users" (click)="viewUserProfile(user.login)">
+    <ion-item *ngFor="let user of users$ | async" (click)="viewUserProfile(user.login)">
       <ion-avatar slot="start">
         <img [src]="user.avatar_url" />
       </ion-avatar>
@@ -17,7 +17,6 @@
   <ion-infinite-scroll
     threshold="100px"
     (ionInfinite)="loadUsers($event)"
-    [disabled]="!hasMoreUsers"
   >
     <ion-infinite-scroll-content
       loadingSpinner="bubbles"
