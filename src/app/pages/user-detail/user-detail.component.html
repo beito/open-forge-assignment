@@ -1,14 +1,16 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>{{ user.name || user.login }}</ion-title>
+    <ion-title>Search User</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
+  <ion-searchbar [(ngModel)]="searchTerm" (ionInput)="searchUser()"></ion-searchbar>
+
   <ion-card *ngIf="user">
     <img [src]="user.avatar_url" />
     <ion-card-content>
-      <ion-card-title>{{ user.name }}</ion-card-title>
+      <ion-card-title>{{ user.name || user.login }}</ion-card-title>
       <p>{{ user.bio }}</p>
       <p>{{ user.company }}</p>
       <p>{{ user.location }}</p>

@@ -54,6 +54,8 @@ export class FeedComponent implements OnInit {
   }
 
   viewUserProfile(username: string) {
-    this.router.navigate(['/user-detail', username]);
+    this.router.navigate(['/tabs/user-detail'], {
+      queryParams: { username },
+    });
   }
 }
