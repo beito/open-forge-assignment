@@ -32,9 +32,6 @@ export class FeedComponent implements OnInit {
     this.store.dispatch(loadUsers());
 
     this.users$.pipe(take(1)).subscribe((data) => {
-      console.log("Siguiente Entrada");
-      console.log(data.length);
-
       if (event) {
         event.target.complete();
       }
