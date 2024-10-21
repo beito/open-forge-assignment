@@ -1,3 +1,20 @@
-<p>
-  user-detail works!
-</p>
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ user.name || user.login }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="user">
+    <img [src]="user.avatar_url" />
+    <ion-card-content>
+      <ion-card-title>{{ user.name }}</ion-card-title>
+      <p>{{ user.bio }}</p>
+      <p>{{ user.company }}</p>
+      <p>{{ user.location }}</p>
+      <ion-button *ngIf="user.blog" (click)="openWebsite(user.blog)">
+        Visit Website
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>

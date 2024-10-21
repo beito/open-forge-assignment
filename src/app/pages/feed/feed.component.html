@@ -6,7 +6,7 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let user of users">
+    <ion-item *ngFor="let user of users" (click)="viewUserProfile(user.login)">
       <ion-avatar slot="start">
         <img [src]="user.avatar_url" />
       </ion-avatar>
