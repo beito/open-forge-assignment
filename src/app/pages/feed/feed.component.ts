@@ -14,13 +14,22 @@ import { GitHubUser } from '../../models/github-user.model';
   imports: [CommonModule, IonicModule, HttpClientModule],
 })
 export class FeedComponent implements OnInit {
-  users: GitHubUser[] = [];
+  public users: GitHubUser[] = [];
+  private nextID = 0;
 
   constructor(private githubService: GitHubService, private router: Router) {}
 
   ngOnInit() {
-    this.githubService.getUsers().subscribe((data) => {
-      this.users = data;
+    this.loadUsers();
+  }
+
+  loadUsers(event?: any) {
+    this.githubService.getUsers(this.nextID).subscribe((data) => {
+      this.users = [...this.users, ...data];
+      this.nextID = data[data.length - 1]?.id || this.nextID;
+      if (event) {
+        event.target.complete();
+      }
     });
   }
 

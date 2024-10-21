@@ -15,7 +15,7 @@ import { Browser } from '@capacitor/browser';
   imports: [CommonModule, IonicModule, HttpClientModule],
 })
 export class UserDetailComponent implements OnInit {
-  user!: GitHubUser;
+  public user!: GitHubUser;
 
   constructor(
     private route: ActivatedRoute,
