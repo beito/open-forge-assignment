@@ -7,17 +7,15 @@ import { GitHubUser } from '../models/github-user.model';
   providedIn: 'root',
 })
 export class GitHubService {
-  private readonly apiUrl = 'https://api.github.com/users'; // URL base de la API
+  private readonly APIURL = 'https://api.github.com/users';
 
   constructor(private http: HttpClient) {}
 
-  // Obtener lista de usuarios con paginación
   getUsers(since: number = 0): Observable<GitHubUser[]> {
-    return this.http.get<GitHubUser[]>(`${this.apiUrl}?since=${since}`);
+    return this.http.get<GitHubUser[]>(`${this.APIURL}?since=${since}`);
   }
 
-  // Obtener detalles de un usuario específico por su nombre de usuario
   getUserDetails(username: string): Observable<GitHubUser> {
-    return this.http.get<GitHubUser>(`${this.apiUrl}/${username}`);
+    return this.http.get<GitHubUser>(`${this.APIURL}/${username}`);
   }
 }
