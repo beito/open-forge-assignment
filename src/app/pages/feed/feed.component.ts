@@ -15,6 +15,7 @@ import { GitHubUser } from '../../models/github-user.model';
 })
 export class FeedComponent implements OnInit {
   public users: GitHubUser[] = [];
+  public hasMoreUsers = true;
   private nextID = 0;
 
   constructor(private githubService: GitHubService, private router: Router) {}
@@ -24,13 +25,32 @@ export class FeedComponent implements OnInit {
   }
 
   loadUsers(event?: any) {
-    this.githubService.getUsers(this.nextID).subscribe((data) => {
-      this.users = [...this.users, ...data];
-      this.nextID = data[data.length - 1]?.id || this.nextID;
+    if (!this.hasMoreUsers) {
       if (event) {
-        event.target.complete();
+        event.target.disabled = true;
       }
-    });
+      return;
+    }
+
+    this.githubService.getUsers(this.nextID).subscribe(
+      (data) => {
+        if (data.length > 0) {
+          this.users = [...this.users, ...data];
+          this.nextID = data[data.length - 1].id;
+        } else {
+          this.hasMoreUsers = false;
+        }
+
+        if (event) {
+          event.target.complete();
+        }
+      },
+      (error) => {
+        if (event) {
+          event.target.complete();
+        }
+      }
+    );
   }
 
   viewUserProfile(username: string) {
