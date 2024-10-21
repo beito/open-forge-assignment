@@ -1,11 +1,18 @@
-import { Directive } from '@angular/core';
+import { Directive, ElementRef, Input, OnInit } from '@angular/core';
 
 @Directive({
   selector: '[appHighlightRepos]',
-  standalone: true
+  standalone: true,
 })
-export class HighlightReposDirective {
+export class HighlightReposDirective implements OnInit {
+  @Input('appHighlightRepos') publicRepos!: number;
 
-  constructor() { }
+  constructor(private el: ElementRef) {}
 
+  ngOnInit() {
+    if (this.publicRepos > 2) {
+      this.el.nativeElement.style.color = 'red';
+      this.el.nativeElement.style.fontWeight = 'bold';
+    }
+  }
 }

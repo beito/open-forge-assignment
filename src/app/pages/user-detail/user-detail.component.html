@@ -10,7 +10,9 @@
   <ion-card *ngIf="user">
     <img [src]="user.avatar_url" />
     <ion-card-content>
-      <ion-card-title>{{ user.name || user.login }}</ion-card-title>
+      <ion-card-title [appHighlightRepos]="user.public_repos">
+        {{ user.name || user.login }}
+      </ion-card-title>
       <p>{{ user.bio }}</p>
       <p>{{ user.company }}</p>
       <p>{{ user.location }}</p>

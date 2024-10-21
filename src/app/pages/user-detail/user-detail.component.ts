@@ -1,19 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { IonicModule } from '@ionic/angular';
-import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { IonicModule, IonRouterOutlet } from '@ionic/angular';
+import { Browser } from '@capacitor/browser';
+
 import { GitHubService } from '../../services/github.service';
 import { GitHubUser } from '../../models/github-user.model';
-import { Browser } from '@capacitor/browser';
-import { FormsModule } from '@angular/forms';
+import { HighlightReposDirective } from '../../directives/highlight-repos.directive';
 
 @Component({
   selector: 'app-user-detail',
   templateUrl: './user-detail.component.html',
   styleUrls: ['./user-detail.component.scss'],
   standalone: true,
-  imports: [CommonModule, IonicModule, FormsModule, HttpClientModule],
+  imports: [CommonModule, IonicModule, FormsModule, HighlightReposDirective],
 })
 export class UserDetailComponent implements OnInit {
   public searchTerm: string = '';
@@ -21,7 +22,8 @@ export class UserDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private githubService: GitHubService
+    private githubService: GitHubService,
+    private routerOutlet: IonRouterOutlet
   ) {}
 
   ngOnInit() {
@@ -32,6 +34,12 @@ export class UserDetailComponent implements OnInit {
         this.searchUser();
       }
     });
+
+    this.routerOutlet.activateEvents.subscribe(() => {
+      if (!this.route.snapshot.queryParams['username']) {
+        this.clearSearch();
+      }
+    });
   }
 
   searchUser() {
@@ -40,6 +48,11 @@ export class UserDetailComponent implements OnInit {
         this.user = data;
       });
     }
+  }
+
+  clearSearch() {
+    this.searchTerm = '';
+    this.user = undefined!;
   }
 
   async openWebsite(url: string) {
